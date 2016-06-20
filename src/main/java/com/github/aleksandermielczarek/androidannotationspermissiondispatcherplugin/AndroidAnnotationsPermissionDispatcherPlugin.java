@@ -14,7 +14,7 @@ public class AndroidAnnotationsPermissionDispatcherPlugin extends AndroidAnnotat
 
     @Override
     public String getName() {
-        return "AndroidAnnotationsPermissionDispatcherPlugin";
+        return "androidannotationspermissiondispatcherplugin";
     }
 
     @Override
