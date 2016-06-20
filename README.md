@@ -2,7 +2,7 @@
 
 # AndroidAnnotationsPermissionsDispatcherPlugin
 
-Plugin for [AndroidAnnotations](http://androidannotations.org/) allowing to use it together with [PermissionsDispatcher](https://github.com/hotchemi/PermissionsDispatcher).
+Plugin for [AndroidAnnotations](http://androidannotations.org/) allowing to use it together with [PermissionsDispatcher](http://hotchemi.github.io/PermissionsDispatcher/).
 All you have to do is to include it in your dependencies.
 
 ## Usage
