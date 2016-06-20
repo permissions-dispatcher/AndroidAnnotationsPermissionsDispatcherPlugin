@@ -10,11 +10,11 @@ import java.util.List;
 /**
  * Created by Aleksander Mielczarek on 19.06.2016.
  */
-public class AndroidAnnotationsPermissionDispatcherPlugin extends AndroidAnnotationsPlugin {
+public class AndroidAnnotationsPermissionsDispatcherPlugin extends AndroidAnnotationsPlugin {
 
     @Override
     public String getName() {
-        return "androidannotationspermissiondispatcherplugin";
+        return "androidannotationspermissionsdispatcherplugin";
     }
 
     @Override

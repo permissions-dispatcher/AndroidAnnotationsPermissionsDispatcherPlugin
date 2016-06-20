@@ -1,6 +1,6 @@
 [![](https://jitpack.io/v/AleksanderMielczarek/AndroidAnnotationsPermissionDispatcherPlugin.svg)](https://jitpack.io/#AleksanderMielczarek/AndroidAnnotationsPermissionDispatcherPlugin)
 
-# AndroidAnnotationsPermissionDispatcherPlugin
+# AndroidAnnotationsPermissionsDispatcherPlugin
 
 Plugin for [AndroidAnnotations](http://androidannotations.org/) allowing to use it together with [PermissionsDispatcher](https://github.com/hotchemi/PermissionsDispatcher).
 All you have to do is to include it in your dependencies.
@@ -26,7 +26,7 @@ dependencies {
     apt 'com.github.hotchemi:permissionsdispatcher-processor:2.1.3'
     compile 'org.androidannotations:androidannotations-api:4.0.0'
     apt 'org.androidannotations:androidannotations:4.0.0'
-    apt 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionDispatcherPlugin:0.1.0'
+    apt 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:0.1.0'
 }
 ```
 
