@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/AleksanderMielczarek/AndroidAnnotationsPermissionDispatcherPlugin.svg)](https://jitpack.io/#AleksanderMielczarek/AndroidAnnotationsPermissionDispatcherPlugin)
+[![](https://jitpack.io/v/AleksanderMielczarek/AndroidAnnotationsPermissionsDispatcherPlugin.svg)](https://jitpack.io/#AleksanderMielczarek/AndroidAnnotationsPermissionsDispatcherPlugin)
 
 # AndroidAnnotationsPermissionsDispatcherPlugin
 
