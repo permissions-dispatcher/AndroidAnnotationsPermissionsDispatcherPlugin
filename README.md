@@ -22,9 +22,15 @@ Add the dependency
 
 ```groovy
 dependencies {
+    compile 'com.github.hotchemi:permissionsdispatcher:2.1.3'
+    apt 'com.github.hotchemi:permissionsdispatcher-processor:2.1.3'
+    compile 'org.androidannotations:androidannotations-api:4.0.0'
+    apt 'org.androidannotations:androidannotations:4.0.0'
     apt 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionDispatcherPlugin:0.1.0'
 }
 ```
+
+**Please notice that PermissionsDispatcher is before AndroidAnnotations.**
 
 ## License
 
