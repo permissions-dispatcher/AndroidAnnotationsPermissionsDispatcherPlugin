@@ -30,7 +30,7 @@ dependencies {
 }
 ```
 
-**Please notice that PermissionsDispatcher is before AndroidAnnotations.**
+**Please notice that PermissionsDispatcher is above AndroidAnnotations.**
 
 ## License
 
