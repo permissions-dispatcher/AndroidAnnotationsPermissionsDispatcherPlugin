@@ -1,0 +1,15 @@
+apply plugin: 'java'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.AleksanderMielczarek'
+
+def versionMajor = 0
+def versionMinor = 1
+def versionFix = 0
+
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
+
+dependencies {
+    compile 'org.androidannotations:androidannotations:4.0.0'
+}
