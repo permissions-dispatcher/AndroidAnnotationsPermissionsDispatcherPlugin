@@ -1,4 +1,4 @@
-package com.github.aleksandermielczarek.androidannotationspermissiondispatcherplugin;
+package com.github.aleksandermielczarek.androidannotationspermissionsdispatcherplugin;
 
 import org.androidannotations.AndroidAnnotationsEnvironment;
 import org.androidannotations.ElementValidation;
