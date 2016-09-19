@@ -26,7 +26,14 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.github.hotchemi:permissionsdispatcher:2.1.3'
     apt 'com.github.hotchemi:permissionsdispatcher-processor:2.1.3'
-    compile 'org.androidannotations:androidannotations-api:4.0.0'
-    apt 'org.androidannotations:androidannotations:4.0.0'
+    compile 'org.androidannotations:androidannotations-api:4.1.0'
+    apt 'org.androidannotations:androidannotations:4.1.0'
     apt project(':androidannotationspermissionsdispatcherplugin')
+}
+
+apt {
+    arguments {
+        androidManifestFile variant.outputs[0]?.processResources?.manifestFile
+        resourcePackageName android.defaultConfig.applicationId
+    }
 }
