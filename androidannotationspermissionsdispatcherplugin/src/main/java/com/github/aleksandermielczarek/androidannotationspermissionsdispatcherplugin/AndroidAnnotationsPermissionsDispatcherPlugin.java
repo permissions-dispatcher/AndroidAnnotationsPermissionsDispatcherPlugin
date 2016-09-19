@@ -23,9 +23,4 @@ public class AndroidAnnotationsPermissionsDispatcherPlugin extends AndroidAnnota
         handlers.add(new RuntimePermissionsHandler(androidAnnotationEnv));
         return handlers;
     }
-
-    @Override
-    public boolean shouldCheckApiAndProcessorVersions() {
-        return false;
-    }
 }
