@@ -3,13 +3,9 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.AleksanderMielczarek'
 
-def versionMajor = 0
-def versionMinor = 1
-def versionFix = 0
-
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 
 dependencies {
-    compileOnly 'org.androidannotations:androidannotations:4.1.0'
+    compileOnly "org.androidannotations:androidannotations:$androidannotationsVersion"
 }
