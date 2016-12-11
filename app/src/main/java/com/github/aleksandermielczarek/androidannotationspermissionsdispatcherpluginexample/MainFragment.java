@@ -9,6 +9,9 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 
 import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
 /**
@@ -26,6 +29,17 @@ public class MainFragment extends Fragment {
     @NeedsPermission(Manifest.permission.CAMERA)
     void showCamera() {
         Toast.makeText(getContext(), "Permission granted in fragment", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnShowRationale(Manifest.permission.CAMERA)
+    protected void showRationaleForSettings(PermissionRequest request) {
+        Toast.makeText(getContext(), "OnShowRationale", Toast.LENGTH_SHORT).show();
+        request.proceed();
+    }
+
+    @OnNeverAskAgain(Manifest.permission.CAMERA)
+    protected void showNeverAskForSettings() {
+        Toast.makeText(getContext(), "OnNeverAskAgain", Toast.LENGTH_SHORT).show();
     }
 
     @Override

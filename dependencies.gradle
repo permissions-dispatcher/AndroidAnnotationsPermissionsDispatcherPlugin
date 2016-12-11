@@ -5,7 +5,7 @@ ext {
 
     minSdkVersionVersion = 16
     sdkVersion = 25
-    buildToolsVersionVersion = "25.0.0"
+    buildToolsVersionVersion = "25.0.1"
 
     toolsBuildGradleVersion = '2.2.2'
     androidAptVersion = '1.8'
@@ -14,7 +14,7 @@ ext {
 
     espressoCoreVersion = '2.2.2'
     junitVersion = '4.12'
-    supportLibraryVersion = '25.0.0'
-    androidannotationsVersion = '4.1.0'
-    permissionsdispatcherVersion = '2.2.0'
+    supportLibraryVersion = '25.0.1'
+    androidannotationsVersion = '4.2.0'
+    permissionsdispatcherVersion = '2.2.1'
 }

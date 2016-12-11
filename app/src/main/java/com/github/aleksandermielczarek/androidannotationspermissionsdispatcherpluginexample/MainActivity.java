@@ -9,6 +9,9 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 
 import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
 /**
@@ -26,6 +29,17 @@ public class MainActivity extends AppCompatActivity {
     @NeedsPermission(Manifest.permission.CAMERA)
     void showCamera() {
         Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnShowRationale(Manifest.permission.CAMERA)
+    protected void showRationaleForSettings(PermissionRequest request) {
+        Toast.makeText(this, "OnShowRationale", Toast.LENGTH_SHORT).show();
+        request.proceed();
+    }
+
+    @OnNeverAskAgain(Manifest.permission.CAMERA)
+    protected void showNeverAskForSettings() {
+        Toast.makeText(this, "OnNeverAskAgain", Toast.LENGTH_SHORT).show();
     }
 
     @Override
