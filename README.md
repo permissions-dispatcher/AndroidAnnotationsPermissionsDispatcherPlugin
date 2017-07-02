@@ -27,7 +27,7 @@ dependencies {
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
     compile 'org.androidannotations:androidannotations-api:4.3.1'
     annotationProcessor 'org.androidannotations:androidannotations:4.3.1'
-    annotationProcessor 'com.github.AleksanderMielczarek.AndroidAnnotationsPermissionsDispatcherPlugin:androidannotationspermissionsdispatcherplugin:1.0.0'
+    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:1.0.0'
 }
 ```
 
