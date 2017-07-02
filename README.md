@@ -22,6 +22,7 @@ Add the dependency
 
 ```groovy
 dependencies {
+    //PermissionsDispatcher has to be above AndroidAnnotations
     compile 'com.github.hotchemi:permissionsdispatcher:2.4.0'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
     compile 'org.androidannotations:androidannotations-api:4.3.1'
@@ -30,7 +31,7 @@ dependencies {
 }
 ```
 
-**Please notice that PermissionsDispatcher is above AndroidAnnotations.**
+> #Please notice that PermissionsDispatcher is above AndroidAnnotations.
 
 ## Changelog
 
