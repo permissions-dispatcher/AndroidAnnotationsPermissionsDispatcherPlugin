@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
 
 android {
     compileSdkVersion sdkVersion
@@ -38,15 +37,8 @@ dependencies {
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
 
     compile "com.github.hotchemi:permissionsdispatcher:$permissionsdispatcherVersion"
-    apt "com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcherVersion"
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcherVersion"
     compile "org.androidannotations:androidannotations-api:$androidannotationsVersion"
-    apt "org.androidannotations:androidannotations:$androidannotationsVersion"
-    apt project(':androidannotationspermissionsdispatcherplugin')
-}
-
-apt {
-    arguments {
-        androidManifestFile variant.outputs[0]?.processResources?.manifestFile
-        resourcePackageName android.defaultConfig.applicationId
-    }
+    annotationProcessor "org.androidannotations:androidannotations:$androidannotationsVersion"
+    annotationProcessor project(':androidannotationspermissionsdispatcherplugin')
 }
