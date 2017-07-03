@@ -16,4 +16,5 @@ ext {
     supportLibraryVersion = '25.4.0'
     androidannotationsVersion = '4.3.1'
     permissionsdispatcherVersion = '2.4.0'
+    glideVersion = '4.0.0-RC1'
 }

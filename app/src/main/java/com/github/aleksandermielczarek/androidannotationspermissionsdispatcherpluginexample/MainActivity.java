@@ -3,10 +3,13 @@ package com.github.aleksandermielczarek.androidannotationspermissionsdispatcherp
 import android.Manifest;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -20,6 +23,17 @@ import permissions.dispatcher.RuntimePermissions;
 @EActivity(R.layout.activity_main)
 @RuntimePermissions
 public class MainActivity extends AppCompatActivity {
+
+    @ViewById(R.id.image)
+    protected ImageView image;
+
+    @AfterViews
+    protected void loadImage() {
+        GlideApp.with(this)
+                .load("https://raw.githubusercontent.com/hotchemi/PermissionsDispatcher/master/doc/logo.png")
+                .centerCrop()
+                .into(image);
+    }
 
     @Click(R.id.permissionButton)
     void askForPermission() {
