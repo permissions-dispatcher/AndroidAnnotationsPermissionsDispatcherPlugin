@@ -18,11 +18,11 @@ public class RuntimePermissionsHandler extends BaseAnnotationHandler<EComponentH
 
     @Override
     protected void validate(Element element, ElementValidation validation) {
-
+        validatorHelper.hasEActivityOrEFragment(element, validation);
     }
 
     @Override
     public void process(Element element, EComponentHolder holder) throws Exception {
-
+        // no-op
     }
 }

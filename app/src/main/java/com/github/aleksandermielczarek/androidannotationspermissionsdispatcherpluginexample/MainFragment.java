@@ -1,13 +1,10 @@
 package com.github.aleksandermielczarek.androidannotationspermissionsdispatcherpluginexample;
 
 import android.Manifest;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
-
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
-
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnShowRationale;
@@ -23,7 +20,7 @@ public class MainFragment extends Fragment {
 
     @Click(R.id.permissionButton)
     void askForPermission() {
-        MainFragmentPermissionsDispatcher.showCameraWithCheck(this);
+        showCamera();
     }
 
     @NeedsPermission(Manifest.permission.CAMERA)
@@ -42,9 +39,4 @@ public class MainFragment extends Fragment {
         Toast.makeText(getContext(), "OnNeverAskAgain", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        MainFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-    }
 }
