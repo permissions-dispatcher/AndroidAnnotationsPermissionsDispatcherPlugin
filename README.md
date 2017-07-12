@@ -27,17 +27,58 @@ dependencies {
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
     compile 'org.androidannotations:androidannotations-api:4.3.1'
     annotationProcessor 'org.androidannotations:androidannotations:4.3.1'
-    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:1.0.0'
+    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
 }
 ```
 
 > #Please notice that PermissionsDispatcher is above AndroidAnnotations.
 
-Finally, you should not call the PermissionDispatcher delegate class static methods anymore, this
+## Example
+
+```java
+@EActivity(R.layout.activity_main)
+@RuntimePermissions
+public class MainActivity extends AppCompatActivity {
+
+    @Click(R.id.permissionButton)
+    protected void askForPermission() {
+        showCamera();
+    }
+
+    @NeedsPermission(Manifest.permission.CAMERA)
+    protected void showCamera() {
+        Toast.makeText(this, "Permission for camera granted", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnShowRationale(Manifest.permission.CAMERA)
+    protected void showRationaleForCamera(PermissionRequest request) {
+        Toast.makeText(this, "OnShowRationale for camera", Toast.LENGTH_SHORT).show();
+        request.proceed();
+    }
+
+    @OnNeverAskAgain(Manifest.permission.CAMERA)
+    protected void showNeverAskForCamera() {
+        Toast.makeText(this, "OnNeverAskAgain for camera", Toast.LENGTH_SHORT).show();
+    }
+
+}
+```
+
+# Migrating to 2.0.0
+
+Finally, you should not call the PermissionsDispatcher delegate class static methods anymore, this
 plugin will generate those calls for you. Just call the method which was annotated with `@NeedsPermission`. Overriding `onRequestPermissionsResult` should also be removed completely.
 See the example project for code. 
 
+## Thanks
+
+* **WonderCsabo** for integrating plugin completely with PermissionsDispatcher
+
 ## Changelog
+
+### 2.0.0 (2017-07-12)
+
+- fully integration with PermissionsDispatcher
 
 ### 1.0.0 (2017-07-02)
 
