@@ -3,8 +3,10 @@ package com.github.aleksandermielczarek.androidannotationspermissionsdispatcherp
 import android.Manifest;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
+
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnShowRationale;
@@ -19,24 +21,24 @@ import permissions.dispatcher.RuntimePermissions;
 public class MainFragment extends Fragment {
 
     @Click(R.id.permissionButton)
-    void askForPermission() {
+    protected void askForPermission() {
         showCamera();
     }
 
     @NeedsPermission(Manifest.permission.CAMERA)
-    void showCamera() {
-        Toast.makeText(getContext(), "Permission granted in fragment", Toast.LENGTH_SHORT).show();
+    protected void showCamera() {
+        Toast.makeText(getContext(), "Permission for camera granted in fragment", Toast.LENGTH_SHORT).show();
     }
 
     @OnShowRationale(Manifest.permission.CAMERA)
-    protected void showRationaleForSettings(PermissionRequest request) {
-        Toast.makeText(getContext(), "OnShowRationale", Toast.LENGTH_SHORT).show();
+    protected void showRationaleForCamera(PermissionRequest request) {
+        Toast.makeText(getContext(), "OnShowRationale for camera in fragment", Toast.LENGTH_SHORT).show();
         request.proceed();
     }
 
     @OnNeverAskAgain(Manifest.permission.CAMERA)
-    protected void showNeverAskForSettings() {
-        Toast.makeText(getContext(), "OnNeverAskAgain", Toast.LENGTH_SHORT).show();
+    protected void showNeverAskForCamera() {
+        Toast.makeText(getContext(), "OnNeverAskAgain for camera in fragment", Toast.LENGTH_SHORT).show();
     }
 
 }
