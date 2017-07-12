@@ -33,6 +33,10 @@ dependencies {
 
 > #Please notice that PermissionsDispatcher is above AndroidAnnotations.
 
+Finally, you should not call the PermissionDispatcher delegate class static methods anymore, this
+plugin will generate those calls for you. Just call the method which was annotated with `@NeedsPermission`. Overriding `onRequestPermissionsResult` should also be removed completely.
+See the example project for code. 
+
 ## Changelog
 
 ### 1.0.0 (2017-07-02)

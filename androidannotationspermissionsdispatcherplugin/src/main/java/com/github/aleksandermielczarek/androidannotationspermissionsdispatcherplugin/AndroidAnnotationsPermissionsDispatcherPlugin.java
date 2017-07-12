@@ -21,6 +21,7 @@ public class AndroidAnnotationsPermissionsDispatcherPlugin extends AndroidAnnota
     public List<AnnotationHandler<?>> getHandlers(AndroidAnnotationsEnvironment androidAnnotationEnv) {
         List<AnnotationHandler<?>> handlers = new ArrayList<>();
         handlers.add(new RuntimePermissionsHandler(androidAnnotationEnv));
+        handlers.add(new NeedsPermissionHandler(androidAnnotationEnv));
         return handlers;
     }
 }
