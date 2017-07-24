@@ -18,11 +18,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
-    }
 }
+
+def dbflow_version = "4.0.5"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -41,4 +39,8 @@ dependencies {
     compile "org.androidannotations:androidannotations-api:$androidannotationsVersion"
     annotationProcessor "org.androidannotations:androidannotations:$androidannotationsVersion"
     annotationProcessor project(':androidannotationspermissionsdispatcherplugin')
+
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
 }
