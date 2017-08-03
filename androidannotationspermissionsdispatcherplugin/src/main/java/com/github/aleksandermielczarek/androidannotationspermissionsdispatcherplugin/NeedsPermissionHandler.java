@@ -10,9 +10,12 @@ import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JVar;
 import org.androidannotations.AndroidAnnotationsEnvironment;
 import org.androidannotations.ElementValidation;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.EFragment;
 import org.androidannotations.handler.BaseAnnotationHandler;
 import org.androidannotations.holder.EComponentHolder;
 
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -25,10 +28,12 @@ public class NeedsPermissionHandler extends BaseAnnotationHandler<EComponentHold
 
 	@Override
 	protected void validate(Element element, ElementValidation validation) {
-		validatorHelper.enclosingElementHasEActivityOrEFragment(element, validation);
-		validatorHelper.isNotPrivate(element, validation);
-		validatorHelper.isNotFinal(element, validation);
-		validatorHelper.returnTypeIsVoid((ExecutableElement) element, validation);
+		if (validatorHelper.elementHasAnnotation(EActivity.class, element.getEnclosingElement())
+				|| validatorHelper.elementHasAnnotation(EFragment.class, element.getEnclosingElement())) {
+			validatorHelper.isNotPrivate(element, validation);
+			validatorHelper.isNotFinal(element, validation);
+			validatorHelper.returnTypeIsVoid((ExecutableElement) element, validation);
+		}
 	}
 
 	@Override
@@ -64,10 +69,22 @@ public class NeedsPermissionHandler extends BaseAnnotationHandler<EComponentHold
 			delegateCall.arg(overrideMethod.varParam());
 		}
 
+		codeModelHelper.copyAnnotation(overrideMethod, findAnnotation(element));
+
 		thenBlock.add(delegateCall);
 
 		JBlock elseBlock = conditional._else();
 		elseBlock.assign(dispatcherCalledField, JExpr.FALSE);
 		elseBlock.add(previousMethodBody);
+	}
+
+	private AnnotationMirror findAnnotation(Element element) {
+		for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
+			if (annotationMirror.getAnnotationType().asElement().getSimpleName().toString().equals("NeedsPermission")) {
+				return annotationMirror;
+			}
+		}
+
+		throw new IllegalStateException("Handled annotation should be on the method!");
 	}
 }
