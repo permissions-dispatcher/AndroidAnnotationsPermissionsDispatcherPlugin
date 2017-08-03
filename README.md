@@ -27,7 +27,7 @@ dependencies {
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
     compile 'org.androidannotations:androidannotations-api:4.3.1'
     annotationProcessor 'org.androidannotations:androidannotations:4.3.1'
-    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
+    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.1'
 }
 ```
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-# Migrating to 2.0.0
+# Migrating to 2.x.x
 
 Finally, you should not call the PermissionsDispatcher delegate class static methods anymore, this
 plugin will generate those calls for you. Just call the method which was annotated with `@NeedsPermission`. Overriding `onRequestPermissionsResult` should also be removed completely.
@@ -75,6 +75,10 @@ See the example project for code.
 * **WonderCsabo** for integrating plugin completely with PermissionsDispatcher
 
 ## Changelog
+
+### 2.0.1 (2017-08-03)
+
+- fix not compiling code when AA is running first (#7)
 
 ### 2.0.0 (2017-07-12)
 
