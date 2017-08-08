@@ -40,5 +40,4 @@ public class MainFragment extends Fragment {
     protected void showNeverAskForCamera() {
         Toast.makeText(getContext(), "OnNeverAskAgain for camera in fragment", Toast.LENGTH_SHORT).show();
     }
-
 }

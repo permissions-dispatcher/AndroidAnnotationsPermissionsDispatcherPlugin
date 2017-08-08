@@ -7,72 +7,112 @@ import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JVar;
+
 import org.androidannotations.holder.EComponentHolder;
 import org.androidannotations.plugin.PluginClassHolder;
 
 public class PermissionDispatcherHolder extends PluginClassHolder<EComponentHolder> {
 
-	private JFieldVar permissionDispatcherCalledField;
-	private JMethod onRequestPermissionsResultMethod;
-	private JBlock onRequestPermissionsResultMethodDelegateBlock;
-	private JVar requestCodeParam;
-	private JVar grantResultsParam;
+    private JFieldVar permissionDispatcherCalledField;
 
-	public PermissionDispatcherHolder(EComponentHolder holder) {
-		super(holder);
-	}
+    private JMethod onRequestPermissionsResultMethod;
+    private JBlock onRequestPermissionsResultMethodDelegateBlock;
+    private JVar onRequestPermissionsResultGrantResultsParam;
+    private JVar onRequestPermissionsResultRequestCodeParam;
 
-	public JFieldVar getPermissionDispatcherCalledField() {
-		if (permissionDispatcherCalledField == null) {
-			setPermissionDispatcherCalledField();
-		}
+    private JMethod onActivityResultMethod;
+    private JBlock onActivityResultMethodDelegateBlock;
+    private JVar onActivityResultRequestCodeParam;
 
-		return permissionDispatcherCalledField;
-	}
+    public PermissionDispatcherHolder(EComponentHolder holder) {
+        super(holder);
+    }
 
-	private void setPermissionDispatcherCalledField() {
-		permissionDispatcherCalledField = holder().getGeneratedClass().field(JMod.PRIVATE, getCodeModel().BOOLEAN, "permissionDispatcherCalled_");
-	}
+    public JFieldVar getPermissionDispatcherCalledField() {
+        if (permissionDispatcherCalledField == null) {
+            setPermissionDispatcherCalledField();
+        }
 
-	public JMethod getOnRequestPermissionsResult() {
-		if (onRequestPermissionsResultMethod == null) {
-			setOnRequestPermissionsResultMethod();
-		}
+        return permissionDispatcherCalledField;
+    }
 
-		return onRequestPermissionsResultMethod;
-	}
+    private void setPermissionDispatcherCalledField() {
+        permissionDispatcherCalledField = holder().getGeneratedClass().field(JMod.PRIVATE, getCodeModel().BOOLEAN, "permissionDispatcherCalled_");
+    }
 
-	private void setOnRequestPermissionsResultMethod() {
-		onRequestPermissionsResultMethod = holder().getGeneratedClass().method(JMod.PUBLIC, getCodeModel().VOID, "onRequestPermissionsResult");
-		onRequestPermissionsResultMethod.annotate(Override.class);
+    private void setOnRequestPermissionsResultMethod() {
+        onRequestPermissionsResultMethod = holder().getGeneratedClass().method(JMod.PUBLIC, getCodeModel().VOID, "onRequestPermissionsResult");
+        onRequestPermissionsResultMethod.annotate(Override.class);
 
-		requestCodeParam = onRequestPermissionsResultMethod.param(getCodeModel().INT, "requestCode");
-		JVar permissionsParam = onRequestPermissionsResultMethod.param(getJClass("java.lang.String").array(), "permissions");
-		grantResultsParam = onRequestPermissionsResultMethod.param(getCodeModel().INT.array(), "grantResults");
+        onRequestPermissionsResultRequestCodeParam = onRequestPermissionsResultMethod.param(getCodeModel().INT, "requestCode");
+        JVar permissionsParam = onRequestPermissionsResultMethod.param(getJClass("java.lang.String").array(), "permissions");
+        onRequestPermissionsResultGrantResultsParam = onRequestPermissionsResultMethod.param(getCodeModel().INT.array(), "grantResults");
 
-		JBlock onRequestPermissionsResultMethodBody = onRequestPermissionsResultMethod.body();
+        JBlock onRequestPermissionsResultMethodBody = onRequestPermissionsResultMethod.body();
 
-		onRequestPermissionsResultMethodBody.invoke(JExpr._super(), "onRequestPermissionsResult")
-				.arg(requestCodeParam)
-				.arg(permissionsParam)
-				.arg(grantResultsParam);
+        onRequestPermissionsResultMethodBody.invoke(JExpr._super(), "onRequestPermissionsResult")
+                .arg(onRequestPermissionsResultRequestCodeParam)
+                .arg(permissionsParam)
+                .arg(onRequestPermissionsResultGrantResultsParam);
 
-		onRequestPermissionsResultMethodDelegateBlock = onRequestPermissionsResultMethodBody.blockVirtual();
+        onRequestPermissionsResultMethodDelegateBlock = onRequestPermissionsResultMethodBody.blockVirtual();
 
-		onRequestPermissionsResultMethodBody.assign(getPermissionDispatcherCalledField(), JExpr.FALSE);
-	}
+        onRequestPermissionsResultMethodBody.assign(getPermissionDispatcherCalledField(), JExpr.FALSE);
+    }
 
-	public void setDelegateCall(AbstractJClass delegateClass) {
-		if (onRequestPermissionsResultMethod != null) {
-			return;
-		}
+    private void setOnActivityResultMethod() {
+        onActivityResultMethod = holder().getGeneratedClass().methods().stream()
+                .filter(jMethod -> jMethod.name().contains("onActivityResult"))
+                .findFirst()
+                .orElseGet(() -> {
+                    JMethod onActivityResultMethod = holder().getGeneratedClass().method(JMod.PUBLIC, getCodeModel().VOID, "onActivityResult");
+                    onActivityResultMethod.annotate(Override.class);
 
-		setOnRequestPermissionsResultMethod();
+                    onActivityResultRequestCodeParam = onActivityResultMethod.param(getCodeModel().INT, "requestCode");
+                    JVar resultCodeParam = onActivityResultMethod.param(getCodeModel().INT, "resultCode");
+                    JVar dataParam = onActivityResultMethod.param(getCodeModel().parseType("android.content.Intent"), "data");
 
-		onRequestPermissionsResultMethodDelegateBlock.add(delegateClass.staticInvoke("onRequestPermissionsResult")
-				.arg(JExpr._this())
-				.arg(requestCodeParam)
-				.arg(grantResultsParam));
-	}
+                    JBlock onActivityResultMethodBody = onActivityResultMethod.body();
 
+                    onActivityResultMethodBody.invoke(JExpr._super(), "onActivityResult")
+                            .arg(onActivityResultRequestCodeParam)
+                            .arg(resultCodeParam)
+                            .arg(dataParam);
+                    return onActivityResultMethod;
+                });
+
+        JBlock onActivityResultMethodBody = onActivityResultMethod.body();
+        onActivityResultMethodDelegateBlock = onActivityResultMethodBody.blockVirtual();
+
+        if (onActivityResultRequestCodeParam == null) {
+            onActivityResultRequestCodeParam = onActivityResultMethod.paramAtIndex(0);
+        }
+
+        onActivityResultMethodBody.assign(getPermissionDispatcherCalledField(), JExpr.FALSE);
+    }
+
+    public void setOnRequestPermissionsResultDelegateCall(AbstractJClass delegateClass) {
+        if (onRequestPermissionsResultMethod != null) {
+            return;
+        }
+
+        setOnRequestPermissionsResultMethod();
+
+        onRequestPermissionsResultMethodDelegateBlock.add(delegateClass.staticInvoke("onRequestPermissionsResult")
+                .arg(JExpr._this())
+                .arg(onRequestPermissionsResultRequestCodeParam)
+                .arg(onRequestPermissionsResultGrantResultsParam));
+    }
+
+    public void setOnActivityResultDelegateCall(AbstractJClass delegateClass) {
+        if (onActivityResultMethod != null) {
+            return;
+        }
+
+        setOnActivityResultMethod();
+
+        onActivityResultMethodDelegateBlock.add(delegateClass.staticInvoke("onActivityResult")
+                .arg(JExpr._this())
+                .arg(onActivityResultRequestCodeParam));
+    }
 }

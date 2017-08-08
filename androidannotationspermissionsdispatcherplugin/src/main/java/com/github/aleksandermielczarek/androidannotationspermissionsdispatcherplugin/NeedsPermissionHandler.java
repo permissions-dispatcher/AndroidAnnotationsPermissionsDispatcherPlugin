@@ -8,6 +8,7 @@ import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JVar;
+
 import org.androidannotations.AndroidAnnotationsEnvironment;
 import org.androidannotations.ElementValidation;
 import org.androidannotations.annotations.EActivity;
@@ -22,69 +23,98 @@ import javax.lang.model.element.TypeElement;
 
 public class NeedsPermissionHandler extends BaseAnnotationHandler<EComponentHolder> {
 
-	public NeedsPermissionHandler(AndroidAnnotationsEnvironment environment) {
-		super("permissions.dispatcher.NeedsPermission", environment);
-	}
+    public static final String PERMISSION_WRITE_SETTINGS = "\"android.permission.WRITE_SETTINGS\"";
+    public static final String PERMISSION_SYSTEM_ALERT_WINDOW = "\"android.permission.SYSTEM_ALERT_WINDOW\"";
 
-	@Override
-	protected void validate(Element element, ElementValidation validation) {
-		if (validatorHelper.elementHasAnnotation(EActivity.class, element.getEnclosingElement())
-				|| validatorHelper.elementHasAnnotation(EFragment.class, element.getEnclosingElement())) {
-			validatorHelper.isNotPrivate(element, validation);
-			validatorHelper.isNotFinal(element, validation);
-			validatorHelper.returnTypeIsVoid((ExecutableElement) element, validation);
-		}
-	}
+    public NeedsPermissionHandler(AndroidAnnotationsEnvironment environment) {
+        super("permissions.dispatcher.NeedsPermission", environment);
+    }
 
-	@Override
-	public void process(Element element, EComponentHolder holder) throws Exception {
-		TypeElement annotatedElement = holder.getAnnotatedElement();
-		String delegateClassName = annotatedElement.getQualifiedName().toString() + "PermissionsDispatcher";
-		AbstractJClass delegateClass = getJClass(delegateClassName);
+    @Override
+    protected void validate(Element element, ElementValidation validation) {
+        if (validatorHelper.elementHasAnnotation(EActivity.class, element.getEnclosingElement())
+                || validatorHelper.elementHasAnnotation(EFragment.class, element.getEnclosingElement())) {
+            validatorHelper.isNotPrivate(element, validation);
+            validatorHelper.isNotFinal(element, validation);
+            validatorHelper.returnTypeIsVoid((ExecutableElement) element, validation);
+        }
+    }
 
-		PermissionDispatcherHolder permissionDispatcherHolder = holder.getPluginHolder(new PermissionDispatcherHolder(holder));
-		permissionDispatcherHolder.setDelegateCall(delegateClass);
-		JFieldVar dispatcherCalledField = permissionDispatcherHolder.getPermissionDispatcherCalledField();
+    @Override
+    public void process(Element element, EComponentHolder holder) throws Exception {
+        TypeElement annotatedElement = holder.getAnnotatedElement();
+        String delegateClassName = annotatedElement.getQualifiedName().toString() + "PermissionsDispatcher";
+        AbstractJClass delegateClass = getJClass(delegateClassName);
 
-		ExecutableElement executableElement = (ExecutableElement) element;
+        PermissionDispatcherHolder permissionDispatcherHolder = holder.getPluginHolder(new PermissionDispatcherHolder(holder));
 
-		JMethod overrideMethod = codeModelHelper.overrideAnnotatedMethod(executableElement, holder);
-		JBlock previousMethodBody = codeModelHelper.removeBody(overrideMethod);
+        if (hasSpecialPermissions(element)) {
+            permissionDispatcherHolder.setOnActivityResultDelegateCall(delegateClass);
+        }
+        if (hasNormalPermissions(element)) {
+            permissionDispatcherHolder.setOnRequestPermissionsResultDelegateCall(delegateClass);
+        }
 
-		JBlock overrideMethodBody = overrideMethod.body();
-		JConditional conditional = overrideMethodBody._if(dispatcherCalledField.not());
+        JFieldVar dispatcherCalledField = permissionDispatcherHolder.getPermissionDispatcherCalledField();
 
-		JBlock thenBlock = conditional._then();
-		thenBlock.assign(dispatcherCalledField, JExpr.TRUE);
-		String delegateMethodName = element.getSimpleName().toString() + "WithCheck";
+        ExecutableElement executableElement = (ExecutableElement) element;
 
-		JInvocation delegateCall = delegateClass.staticInvoke(delegateMethodName)
-				.arg(JExpr._this());
+        JMethod overrideMethod = codeModelHelper.overrideAnnotatedMethod(executableElement, holder);
+        JBlock previousMethodBody = codeModelHelper.removeBody(overrideMethod);
 
-		for (JVar param : overrideMethod.params()) {
-			delegateCall.arg(param);
-		}
+        JBlock overrideMethodBody = overrideMethod.body();
+        JConditional conditional = overrideMethodBody._if(dispatcherCalledField.not());
 
-		if (overrideMethod.hasVarArgs()) {
-			delegateCall.arg(overrideMethod.varParam());
-		}
+        JBlock thenBlock = conditional._then();
+        thenBlock.assign(dispatcherCalledField, JExpr.TRUE);
+        String delegateMethodName = element.getSimpleName().toString() + "WithCheck";
 
-		codeModelHelper.copyAnnotation(overrideMethod, findAnnotation(element));
+        JInvocation delegateCall = delegateClass.staticInvoke(delegateMethodName)
+                .arg(JExpr._this());
 
-		thenBlock.add(delegateCall);
+        overrideMethod.params().forEach(delegateCall::arg);
 
-		JBlock elseBlock = conditional._else();
-		elseBlock.assign(dispatcherCalledField, JExpr.FALSE);
-		elseBlock.add(previousMethodBody);
-	}
+        if (overrideMethod.hasVarArgs()) {
+            JVar jVar = overrideMethod.varParam();
+            if (jVar != null) {
+                delegateCall.arg(jVar);
+            }
+        }
 
-	private AnnotationMirror findAnnotation(Element element) {
-		for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
-			if (annotationMirror.getAnnotationType().asElement().getSimpleName().toString().equals("NeedsPermission")) {
-				return annotationMirror;
-			}
-		}
+        codeModelHelper.copyAnnotation(overrideMethod, findAnnotation(element));
 
-		throw new IllegalStateException("Handled annotation should be on the method!");
-	}
+        thenBlock.add(delegateCall);
+
+        JBlock elseBlock = conditional._else();
+        elseBlock.assign(dispatcherCalledField, JExpr.FALSE);
+        elseBlock.add(previousMethodBody);
+    }
+
+    private AnnotationMirror findAnnotation(Element element) {
+        return element.getAnnotationMirrors().stream()
+                .filter(this::isNeedsPermission)
+                .findAny()
+                .orElseThrow(() -> new IllegalStateException("Handled annotation should be on the method!"));
+    }
+
+    private boolean hasSpecialPermissions(Element element) {
+        return element.getAnnotationMirrors().stream()
+                .filter(this::isNeedsPermission)
+                .anyMatch(this::hasSpecialPermissions);
+    }
+
+    private boolean hasNormalPermissions(Element element) {
+        return element.getAnnotationMirrors().stream()
+                .filter(this::isNeedsPermission)
+                .anyMatch(annotationMirror -> !hasSpecialPermissions(annotationMirror));
+    }
+
+    private boolean hasSpecialPermissions(AnnotationMirror annotationMirror) {
+        String name = annotationMirror.toString();
+        return name.contains(PERMISSION_SYSTEM_ALERT_WINDOW) || name.contains(PERMISSION_WRITE_SETTINGS);
+    }
+
+    private boolean isNeedsPermission(AnnotationMirror annotationMirror) {
+        return annotationMirror.getAnnotationType().asElement().getSimpleName().toString().equals("NeedsPermission");
+    }
 }

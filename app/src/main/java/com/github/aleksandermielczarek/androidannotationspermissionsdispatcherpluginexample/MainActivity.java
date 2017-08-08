@@ -1,11 +1,13 @@
 package com.github.aleksandermielczarek.androidannotationspermissionsdispatcherpluginexample;
 
 import android.Manifest;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -41,4 +43,13 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "OnNeverAskAgain for camera", Toast.LENGTH_SHORT).show();
     }
 
+    @NeedsPermission(Manifest.permission.WRITE_SETTINGS)
+    protected void writeSettings() {
+        Toast.makeText(this, "Permission for write settings granted", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnActivityResult(10)
+    protected void onResult(int resultCode, Intent data) {
+
+    }
 }
