@@ -11,9 +11,9 @@ ext {
     gradleVersionsPluginVersion = '0.15.0'
     androidMavenGradlePluginVersion = '1.5'
 
-    espressoCoreVersion = '2.2.2'
+    espressoCoreVersion = '3.0.0'
     junitVersion = '4.12'
-    supportLibraryVersion = '26.0.0'
+    supportLibraryVersion = '26.0.1'
     androidannotationsVersion = '4.3.1'
     permissionsdispatcherVersion = '2.4.0'
 }
