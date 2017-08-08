@@ -27,7 +27,7 @@ dependencies {
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
     compile 'org.androidannotations:androidannotations-api:4.3.1'
     annotationProcessor 'org.androidannotations:androidannotations:4.3.1'
-    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.1'
+    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.2'
 }
 ```
 
@@ -75,6 +75,10 @@ See the example project for code.
 * **WonderCsabo** for integrating plugin completely with PermissionsDispatcher
 
 ## Changelog
+
+### 2.0.2 (2017-08-08)
+
+- fix special permissions handling (#9)
 
 ### 2.0.1 (2017-08-03)
 
