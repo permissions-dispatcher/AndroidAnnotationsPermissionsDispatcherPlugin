@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnPermissionDenied(Manifest.permission.CAMERA)
-    protected void onPermissionDenieCamera() {
+    protected void onPermissionDeniedCamera() {
         Toast.makeText(this, "@OnPermissionDenied for camera", Toast.LENGTH_SHORT).show();
     }
 

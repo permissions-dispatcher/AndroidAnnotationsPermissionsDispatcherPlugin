@@ -22,16 +22,13 @@ Add the dependency
 
 ```groovy
 dependencies {
-    //PermissionsDispatcher has to be above AndroidAnnotations
     compile 'com.github.hotchemi:permissionsdispatcher:2.4.0'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
     compile 'org.androidannotations:androidannotations-api:4.3.1'
     annotationProcessor 'org.androidannotations:androidannotations:4.3.1'
-    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.2'
+    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.3'
 }
 ```
-
-> #Please notice that PermissionsDispatcher is above AndroidAnnotations.
 
 ## Example
 
@@ -50,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Permission for camera granted", Toast.LENGTH_SHORT).show();
     }
 
+    @OnPermissionDenied(Manifest.permission.CAMERA)
+    protected void onPermissionDeniedCamera() {
+        Toast.makeText(this, "@OnPermissionDenied for camera", Toast.LENGTH_SHORT).show();
+    }
+    
     @OnShowRationale(Manifest.permission.CAMERA)
     protected void showRationaleForCamera(PermissionRequest request) {
         Toast.makeText(this, "OnShowRationale for camera", Toast.LENGTH_SHORT).show();
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 # Migrating to 2.x.x
 
 Finally, you should not call the PermissionsDispatcher delegate class static methods anymore, this
-plugin will generate those calls for you. Just call the method which was annotated with `@NeedsPermission`. Overriding `onRequestPermissionsResult` should also be removed completely.
+plugin will generate those calls for you. Just call the method which was annotated with `@NeedsPermission`. Overriding `onRequestPermissionsResult` and `onActivtyResult` (special permissions) should also be removed completely.
 See the example project for code. 
 
 ## Thanks
@@ -75,6 +77,10 @@ See the example project for code.
 * **WonderCsabo** for integrating plugin completely with PermissionsDispatcher
 
 ## Changelog
+
+### 2.0.3 (2017-08-09)
+
+- fix generating duplicated dispatchers (#10)
 
 ### 2.0.2 (2017-08-08)
 
