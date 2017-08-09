@@ -11,6 +11,7 @@ import org.androidannotations.annotations.OnActivityResult;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
@@ -30,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
     @NeedsPermission(Manifest.permission.CAMERA)
     protected void showCamera() {
         Toast.makeText(this, "Permission for camera granted", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnPermissionDenied(Manifest.permission.CAMERA)
+    protected void onPermissionDenieCamera() {
+        Toast.makeText(this, "@OnPermissionDenied for camera", Toast.LENGTH_SHORT).show();
     }
 
     @OnShowRationale(Manifest.permission.CAMERA)
