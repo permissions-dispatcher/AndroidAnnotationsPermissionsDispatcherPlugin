@@ -1,8 +1,10 @@
 package com.github.aleksandermielczarek.androidannotationspermissionsdispatcherplugin;
 
 import com.helger.jcodemodel.AbstractJClass;
+import com.helger.jcodemodel.JAnnotationUse;
 import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JConditional;
+import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JInvocation;
@@ -15,6 +17,9 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.handler.BaseAnnotationHandler;
 import org.androidannotations.holder.EComponentHolder;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
@@ -81,7 +86,9 @@ public class NeedsPermissionHandler extends BaseAnnotationHandler<EComponentHold
             }
         }
 
-        codeModelHelper.copyAnnotation(overrideMethod, findAnnotation(element));
+        if (!removeRuntimePermissionsAnnotation(holder.getGeneratedClass())) {
+            codeModelHelper.copyAnnotation(overrideMethod, findAnnotation(element));
+        }
 
         thenBlock.add(delegateCall);
 
@@ -116,5 +123,21 @@ public class NeedsPermissionHandler extends BaseAnnotationHandler<EComponentHold
 
     private boolean isNeedsPermission(AnnotationMirror annotationMirror) {
         return annotationMirror.getAnnotationType().asElement().getSimpleName().toString().equals("NeedsPermission");
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean removeRuntimePermissionsAnnotation(JDefinedClass activity) {
+        try {
+            Field annotationsField = activity.getClass().getDeclaredField("m_aAnnotations");
+            annotationsField.setAccessible(true);
+            List<JAnnotationUse> annotations = (List<JAnnotationUse>) annotationsField.get(activity);
+            if (annotations == null) {
+                return true;
+            }
+            annotations.removeIf(jAnnotationUse -> jAnnotationUse.getAnnotationClass().name().equals("RuntimePermissions"));
+            return true;
+        } catch (ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+            return false;
+        }
     }
 }
