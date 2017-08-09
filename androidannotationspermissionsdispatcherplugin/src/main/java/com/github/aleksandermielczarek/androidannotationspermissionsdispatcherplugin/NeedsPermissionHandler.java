@@ -50,18 +50,14 @@ public class NeedsPermissionHandler extends BaseAnnotationHandler<EComponentHold
         TypeElement annotatedElement = holder.getAnnotatedElement();
         String delegateClassName = annotatedElement.getQualifiedName().toString() + "PermissionsDispatcher";
         AbstractJClass delegateClass = getJClass(delegateClassName);
-
         PermissionDispatcherHolder permissionDispatcherHolder = holder.getPluginHolder(new PermissionDispatcherHolder(holder));
 
-        if (hasSpecialPermissions(element)) {
-            permissionDispatcherHolder.setOnActivityResultDelegateCall(delegateClass);
-        }
-        if (hasNormalPermissions(element)) {
-            permissionDispatcherHolder.setOnRequestPermissionsResultDelegateCall(delegateClass);
-        }
-
+        setDispatcherCallbacks(element, delegateClass, permissionDispatcherHolder);
         JFieldVar dispatcherCalledField = permissionDispatcherHolder.getPermissionDispatcherCalledField();
+        setPermissionMethods(element, holder, delegateClass, dispatcherCalledField);
+    }
 
+    private void setPermissionMethods(Element element, EComponentHolder holder, AbstractJClass delegateClass, JFieldVar dispatcherCalledField) {
         ExecutableElement executableElement = (ExecutableElement) element;
 
         JMethod overrideMethod = codeModelHelper.overrideAnnotatedMethod(executableElement, holder);
@@ -97,6 +93,15 @@ public class NeedsPermissionHandler extends BaseAnnotationHandler<EComponentHold
         elseBlock.add(previousMethodBody);
     }
 
+    private void setDispatcherCallbacks(Element element, AbstractJClass delegateClass, PermissionDispatcherHolder permissionDispatcherHolder) {
+        if (hasSpecialPermissions(element)) {
+            permissionDispatcherHolder.setOnActivityResultDelegateCall(delegateClass);
+        }
+        if (hasNormalPermissions(element)) {
+            permissionDispatcherHolder.setOnRequestPermissionsResultDelegateCall(delegateClass);
+        }
+    }
+
     private AnnotationMirror findAnnotation(Element element) {
         return element.getAnnotationMirrors().stream()
                 .filter(this::isNeedsPermission)
@@ -126,11 +131,11 @@ public class NeedsPermissionHandler extends BaseAnnotationHandler<EComponentHold
     }
 
     @SuppressWarnings("unchecked")
-    private boolean removeRuntimePermissionsAnnotation(JDefinedClass activity) {
+    private boolean removeRuntimePermissionsAnnotation(JDefinedClass definedClass) {
         try {
-            Field annotationsField = activity.getClass().getDeclaredField("m_aAnnotations");
+            Field annotationsField = definedClass.getClass().getDeclaredField("m_aAnnotations");
             annotationsField.setAccessible(true);
-            List<JAnnotationUse> annotations = (List<JAnnotationUse>) annotationsField.get(activity);
+            List<JAnnotationUse> annotations = (List<JAnnotationUse>) annotationsField.get(definedClass);
             if (annotations == null) {
                 return true;
             }
