@@ -8,7 +8,7 @@
         android:id="@+id/permissionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ask for permission"/>
+        android:text="@string/permission_button"/>
 
     <fragment
         android:id="@+id/headlines_fragment"
