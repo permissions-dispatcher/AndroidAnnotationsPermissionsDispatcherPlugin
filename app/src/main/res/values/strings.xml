@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Android Annotations Permissions Dispatcher Plugin</string>
+    <string name="permission_button">Ask for permission</string>
 </resources>
