@@ -68,7 +68,7 @@ public class NeedsPermissionHandler extends BaseAnnotationHandler<EComponentHold
 
         JBlock thenBlock = conditional._then();
         thenBlock.assign(dispatcherCalledField, JExpr.TRUE);
-        String delegateMethodName = element.getSimpleName().toString() + "WithCheck";
+        String delegateMethodName = element.getSimpleName().toString() + "WithPermissionCheck";
 
         JInvocation delegateCall = delegateClass.staticInvoke(delegateMethodName)
                 .arg(JExpr._this());
