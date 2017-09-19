@@ -15,5 +15,5 @@ ext {
     junitVersion = '4.12'
     supportLibraryVersion = '26.0.2'
     androidannotationsVersion = '4.3.1'
-    permissionsdispatcherVersion = '2.4.0'
+    permissionsdispatcherVersion = '3.0.1'
 }
