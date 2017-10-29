@@ -4,16 +4,16 @@ ext {
     versionFix = 3
 
     minSdkVersionVersion = 23
-    sdkVersion = 26
-    buildToolsVersionVersion = "26.0.1"
+    sdkVersion = 27
+    buildToolsVersionVersion = "27.0.0"
 
-    toolsBuildGradleVersion = '2.3.3'
-    gradleVersionsPluginVersion = '0.15.0'
+    toolsBuildGradleVersion = '3.0.0'
+    gradleVersionsPluginVersion = '0.17.0'
     androidMavenGradlePluginVersion = '1.5'
 
     espressoCoreVersion = '3.0.1'
     junitVersion = '4.12'
-    supportLibraryVersion = '26.0.2'
+    supportLibraryVersion = '27.0.0'
     androidannotationsVersion = '4.3.1'
     permissionsdispatcherVersion = '3.0.1'
 }
