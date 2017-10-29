@@ -22,11 +22,11 @@ Add the dependency
 
 ```groovy
 dependencies {
-    compile 'com.github.hotchemi:permissionsdispatcher:2.4.0'
-    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
-    compile 'org.androidannotations:androidannotations-api:4.3.1'
-    annotationProcessor 'org.androidannotations:androidannotations:4.3.1'
-    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.3'
+    compile "com.github.hotchemi:permissionsdispatcher:${permissionsdispatcherVersion}"
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:${permissionsdispatcherVersion}"
+    compile "org.androidannotations:androidannotations-api:${androidannotationsBersion}"
+    annotationProcessor "org.androidannotations:androidannotations:${androidannotationsVersion}"
+    annotationProcessor "com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:${latestVersion}"
 }
 ```
 
@@ -77,6 +77,11 @@ See the example project for code.
 * **WonderCsabo** for integrating plugin completely with PermissionsDispatcher
 
 ## Changelog
+
+### 2.1.0 (2017-10-29)
+
+- support PermissionsDispatcher 3.0.0
+- does not contain Kotlin support
 
 ### 2.0.3 (2017-08-09)
 
