@@ -48,13 +48,21 @@ public class NeedsPermissionHandler extends BaseAnnotationHandler<EComponentHold
     @Override
     public void process(Element element, EComponentHolder holder) throws Exception {
         TypeElement annotatedElement = holder.getAnnotatedElement();
-        String delegateClassName = annotatedElement.getQualifiedName().toString() + "PermissionsDispatcher";
-        AbstractJClass delegateClass = getJClass(delegateClassName);
-        PermissionDispatcherHolder permissionDispatcherHolder = holder.getPluginHolder(new PermissionDispatcherHolder(holder));
+        if (annotatedElementHasRuntimePermissions(annotatedElement)) {
+            String delegateClassName = annotatedElement.getQualifiedName().toString() + "PermissionsDispatcher";
+            AbstractJClass delegateClass = getJClass(delegateClassName);
+            PermissionDispatcherHolder permissionDispatcherHolder = holder.getPluginHolder(new PermissionDispatcherHolder(holder));
 
-        setDispatcherCallbacks(element, delegateClass, permissionDispatcherHolder);
-        JFieldVar dispatcherCalledField = permissionDispatcherHolder.getPermissionDispatcherCalledField();
-        setPermissionMethods(element, holder, delegateClass, dispatcherCalledField);
+            setDispatcherCallbacks(element, delegateClass, permissionDispatcherHolder);
+            JFieldVar dispatcherCalledField = permissionDispatcherHolder.getPermissionDispatcherCalledField();
+            setPermissionMethods(element, holder, delegateClass, dispatcherCalledField);
+        }
+    }
+
+    private boolean annotatedElementHasRuntimePermissions(TypeElement annotatedElement) {
+        return annotatedElement.getAnnotationMirrors().stream()
+                .map(annotationMirror -> annotationMirror.getAnnotationType().asElement().getSimpleName().toString())
+                .anyMatch(annotation -> annotation.contains("RuntimePermissions"));
     }
 
     private void setPermissionMethods(Element element, EComponentHolder holder, AbstractJClass delegateClass, JFieldVar dispatcherCalledField) {
