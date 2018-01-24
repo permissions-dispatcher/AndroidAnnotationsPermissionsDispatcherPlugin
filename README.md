@@ -78,6 +78,10 @@ See the example project for code.
 
 ## Changelog
 
+### 2.1.1 (2018-01-24)
+
+- do not generate dispatcher calls if there is no `@RuntimePermissions` (#18)
+
 ### 2.1.0 (2017-10-29)
 
 - support PermissionsDispatcher 3.0.0
