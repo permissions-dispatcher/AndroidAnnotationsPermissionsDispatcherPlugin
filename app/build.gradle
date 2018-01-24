@@ -25,21 +25,22 @@ android {
 }
 
 dependencies {
-    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
 
-    compile ("com.github.hotchemi:permissionsdispatcher:$permissionsdispatcherVersion") {
+    implementation("com.github.hotchemi:permissionsdispatcher:$permissionsdispatcherVersion") {
         exclude module: 'support-compat'
         exclude module: 'support-v13'
     }
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcherVersion"
 
-    compile "org.androidannotations:androidannotations-api:$androidannotationsVersion"
+    implementation "org.androidannotations:androidannotations-api:$androidannotationsVersion"
     annotationProcessor "org.androidannotations:androidannotations:$androidannotationsVersion"
 
     annotationProcessor project(':androidannotationspermissionsdispatcherplugin')
 
-    testCompile "junit:junit:$junitVersion"
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoCoreVersion", {
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoCoreVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
     })
 }
