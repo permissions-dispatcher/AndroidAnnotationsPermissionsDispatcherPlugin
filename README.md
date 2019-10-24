@@ -24,7 +24,7 @@ Add the dependency
 dependencies {
     compile "com.github.hotchemi:permissionsdispatcher:${permissionsdispatcherVersion}"
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:${permissionsdispatcherVersion}"
-    compile "org.androidannotations:androidannotations-api:${androidannotationsBersion}"
+    compile "org.androidannotations:androidannotations-api:${androidannotationsVersion}"
     annotationProcessor "org.androidannotations:androidannotations:${androidannotationsVersion}"
     annotationProcessor "com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:${latestVersion}"
 }
